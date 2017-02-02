@@ -1,0 +1,72 @@
+    Option Explicit
+    Sub rech()
+    Dim strSearchString As String
+    Dim Ws As Object
+    Dim foundCell As Variant
+    Dim loopAddr As Variant
+    Dim returnValue As String
+    Dim i As Integer
+i = 0
+    Do
+    i = i + 1
+    strSearchString = Sheets("Feuil2").Range("A" & i).Value
+
+    If strSearchString = "" Then Exit Sub
+
+        For Each Ws In Worksheets
+            With Ws
+                .Activate
+                Set foundCell = .Cells.Find(What:=strSearchString, LookIn:=xlValues, LookAt:=xlPart)
+                If Not foundCell Is Nothing Then
+                loopAddr = foundCell.Address
+                    Do
+                        foundCell.Activate
+                           
+                            Set foundCell = .Cells.FindNext(After:=foundCell)
+   '-------------------------------------------
+   If ActiveCell.Rows("1:1").Value Like strSearchString Then
+            ActiveCell.Rows("1:1").Select
+ With Selection.Font
+        .Color = -16711681
+        .TintAndShade = 0
+    End With
+    Selection.Font.Bold = True
+    With Selection.Font
+        .Name = "Calibri"
+        .Size = 16
+        .Strikethrough = False
+        .Superscript = False
+        .Subscript = False
+        .OutlineFont = False
+        .Shadow = False
+        .Underline = xlUnderlineStyleNone
+        .Color = -16711681
+        .TintAndShade = 0
+        .ThemeFont = xlThemeFontMinor
+    End With
+    '****************************
+    '****************************
+                            ActiveCell.Rows("1:1").EntireRow.Select
+With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .Color = 15773696
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+    End If
+    
+    '-------------------------------------------
+                    Loop While Not foundCell Is Nothing And foundCell.Address <> loopAddr
+                End If
+            End With
+        Next Ws
+        
+        
+Loop Until strSearchString = "&"
+    End Sub
+
+
+
+
+
